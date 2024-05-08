@@ -5,6 +5,7 @@ from OpenGL.GLU import *
 from OpenGL.GLUT import *
 from colors import Colors
 
+
 def draw_axis():
     h = 1.0
     glDisable(GL_LIGHTING)
@@ -27,12 +28,14 @@ def draw_axis():
 
     glEnable(GL_LIGHTING)
 
+
 def draw_3d():
     light = [1.0, 1.0, 1.0, 0]
     glLightfv(GL_LIGHT0, GL_POSITION, light)
     draw_axis()
     glColor3fv(Colors.LEMON)
     glutSolidTeapot(2)
+
 
 def resize(width, height):
     glViewport(0, 0, width, height)
@@ -44,43 +47,71 @@ def resize(width, height):
     gluLookAt(0.0, 0.0, 8.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
 
 
-def on_paint(width, height):
+def on_paint(w, h):
+    c = 3
     # XOY
     glViewport(0, h // 2 + 1, w // 2 + 1, h // 2 + 1)
     glScissor(0, h // 2 + 1, w // 2 + 1, h // 2 + 1)
     glClearColor(0.9, 0.7, 0.8, 1)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    glMatrixMode(GL_PROJECTION)
     glPushMatrix()
-    gluLookAt(0.0, 0.0, 8.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0)
+    glLoadIdentity()
+    glOrtho(c * w / h, -c * w / h, -c, c, -10, 0)
+    # glRotate(40, 0, 1, 0)
+    # glRotate(50, 1, 0, 0)
+    glMatrixMode(GL_MODELVIEW)
     draw_3d()
+    glMatrixMode(GL_PROJECTION)
     glPopMatrix()
+    glMatrixMode(GL_MODELVIEW)
     # XOZ
     glViewport(0, 0, w // 2 + 1, h // 2 + 1)
     glScissor(0, 0, w // 2 + 1, h // 2 + 1)
     glClearColor(0.8, 0.9, 0.7, 1)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    glMatrixMode(GL_PROJECTION)
     glPushMatrix()
-    gluLookAt(0.0, 8.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1)
+    glLoadIdentity()
+    glOrtho(-c * w / h, c * w / h, -c, c, -10, 1)
+    glRotate(60, 0, 1, 0)
+    glRotate(45, 1, 0, 0)
+    glMatrixMode(GL_MODELVIEW)
     draw_3d()
+    glMatrixMode(GL_PROJECTION)
     glPopMatrix()
+    glMatrixMode(GL_MODELVIEW)
     # YOZ
     glViewport(w // 2 + 1, h // 2, w // 2, h // 2)
     glScissor(w // 2 + 1, h // 2, w // 2, h // 2)
     glClearColor(0.8, 0.8, 0.9, 0)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    glMatrixMode(GL_PROJECTION)
     glPushMatrix()
-    gluLookAt(8.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
+    glLoadIdentity()
+    glOrtho(-c * w / h, c * w / h, -c, c, 1, 10)
+    gluLookAt(-8.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
+    glMatrixMode(GL_MODELVIEW)
     draw_3d()
+    glMatrixMode(GL_PROJECTION)
     glPopMatrix()
+    glMatrixMode(GL_MODELVIEW)
+
     # XYZ
     glViewport(w // 2 + 1, 0, w // 2, h // 2)
     glScissor(w // 2 + 1, 0, w // 2, h // 2)
     glClearColor(0.9, 0.8, 0.8, 0)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    glMatrixMode(GL_PROJECTION)
     glPushMatrix()
-    gluLookAt(4.5, 4.5, 4.5, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
+    glLoadIdentity()
+    gluPerspective(90, w / h, 1, 10)
+    gluLookAt(0.0, 0.0, 8.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0)
+    glMatrixMode(GL_MODELVIEW)
     draw_3d()
+    glMatrixMode(GL_PROJECTION)
     glPopMatrix()
+    glMatrixMode(GL_MODELVIEW)
 
 
 if __name__ == '__main__':

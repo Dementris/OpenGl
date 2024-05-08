@@ -1,6 +1,5 @@
 from enum import Enum
-from typing import overload
-from typing_extensions import SupportsIndex
+
 
 
 class Colors(list, Enum):
