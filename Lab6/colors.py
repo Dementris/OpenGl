@@ -16,7 +16,7 @@ class Colors(list, Enum):
     BLUE = [0.0, 0.0, 1.0]
     DARCBLUE = {0.0, 0.0, 0.5}
     CYAN = {0.0, 1.0, 1.0}
-    MAGENTA = {1.0, 0.0, 1.0}
+    MAGENTA = [1.0, 0.0, 1.0]
     YELLOW = {1.0, 1.0, 0.0}
     ORANGE = {0.1, 0.5, 0.0}
     LEMON = {0.8, 1.0, 0.0}

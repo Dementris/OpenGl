@@ -121,7 +121,7 @@ if __name__ == '__main__':
     glEnable(GL_COLOR_MATERIAL)
     glClearColor(0.1, 0.0, 0.2, 0.0)
 
-    mult = 4
+    mult = 1
     # -------------------
     while True:
         for event in pg.event.get():

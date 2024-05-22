@@ -3,13 +3,12 @@ from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from OpenGL.GLUT import *
-from colors import Colors
-
+from Lab6.colors import Colors
 
 def draw_axis():
     h = 1.0
     glDisable(GL_LIGHTING)
-    glLineWidth(80)
+    glLineWidth(4)
     glBegin(GL_LINES)
     # OX
     glColor3fv(Colors.RED)
@@ -25,21 +24,20 @@ def draw_axis():
     glVertex3f(0.0, 0.0, 800.0)
 
     glEnd()
-    glEnable(GL_LIGHTING)
 
+    glEnable(GL_LIGHTING)
 
 def draw_3d(angle):
     glPushMatrix()
     draw_axis()
+    light = [1.0, 1.0, 1.0, 0]
+    glLightfv(GL_LIGHT0, GL_POSITION, light)
     glPopMatrix()
     glPushMatrix()
     glRotate(angle, 0, 1, 0)
-    light = [1.0, 1.0, 1.0, 0]
-    glLightfv(GL_LIGHT0, GL_POSITION, light)
     glColor3fv(Colors.LEMON)
     glutSolidTeapot(2)
     glPopMatrix()
-
 
 def resize(width, height):
     glViewport(0, 0, width, height)
@@ -51,70 +49,43 @@ def resize(width, height):
     gluLookAt(0.0, 0.0, 8.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
 
 
-def on_paint(w, h, angle):
-    c = 3
-
+def on_paint(width, height, angle):
     # XOY
     glViewport(0, h // 2 + 1, w // 2 + 1, h // 2 + 1)
     glScissor(0, h // 2 + 1, w // 2 + 1, h // 2 + 1)
+    glClearColor(0.9, 0.7, 0.8, 1)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-    glMatrixMode(GL_PROJECTION)
     glPushMatrix()
-    glLoadIdentity()
-    gluPerspective(90, w / h, 1, 10)
-    gluLookAt(0.0, 0.0, -8.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0)
-    glMatrixMode(GL_MODELVIEW)
+    gluLookAt(0.0, 0.0, 8.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0)
     draw_3d(angle)
-    glMatrixMode(GL_PROJECTION)
     glPopMatrix()
-    glMatrixMode(GL_MODELVIEW)
     # XOZ
     glViewport(0, 0, w // 2 + 1, h // 2 + 1)
     glScissor(0, 0, w // 2 + 1, h // 2 + 1)
     glClearColor(0.8, 0.9, 0.7, 1)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-    glMatrixMode(GL_PROJECTION)
     glPushMatrix()
-    glLoadIdentity()
-    glOrtho(-c * w / h, c * w / h, -c, c, -10, 5)
-    glRotate(60, 0, 1, 0)
-    glRotate(45, 1, 0, 0)
-    glMatrixMode(GL_MODELVIEW)
+    gluLookAt(0.0, 8.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1)
     draw_3d(angle)
-    glMatrixMode(GL_PROJECTION)
     glPopMatrix()
-    glMatrixMode(GL_MODELVIEW)
     # YOZ
     glViewport(w // 2 + 1, h // 2, w // 2, h // 2)
     glScissor(w // 2 + 1, h // 2, w // 2, h // 2)
     glClearColor(0.8, 0.8, 0.9, 0)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-    glMatrixMode(GL_PROJECTION)
     glPushMatrix()
-    glLoadIdentity()
-    glOrtho(-c * w / h, c * w / h, -c, c, 1, 10)
-    gluLookAt(-8.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
-    glMatrixMode(GL_MODELVIEW)
+    gluLookAt(8.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
     draw_3d(angle)
-    glMatrixMode(GL_PROJECTION)
     glPopMatrix()
-    glMatrixMode(GL_MODELVIEW)
-
     # XYZ
     glViewport(w // 2 + 1, 0, w // 2, h // 2)
     glScissor(w // 2 + 1, 0, w // 2, h // 2)
     glClearColor(0.9, 0.8, 0.8, 0)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-    glMatrixMode(GL_PROJECTION)
     glPushMatrix()
-    glLoadIdentity()
-    gluPerspective(90, w / h, 1, 10)
-    gluLookAt(0.0, 0.0, 8.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0)
-    glMatrixMode(GL_MODELVIEW)
+    gluLookAt(4.5, 4.5, 4.5, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
     draw_3d(angle)
-    glMatrixMode(GL_PROJECTION)
     glPopMatrix()
-    glMatrixMode(GL_MODELVIEW)
 
 
 if __name__ == '__main__':
@@ -130,6 +101,10 @@ if __name__ == '__main__':
     gluPerspective(45, (800 / 600), 0.1, 50.0)
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
+
+    glMaterialf(GL_FRONT, GL_SHININESS, 50.0),
+    glMaterialfv(GL_FRONT, GL_SPECULAR, Colors.WHITE)
+    glLightfv(GL_LIGHT0, GL_SPECULAR, Colors.WHITE )
 
     glEnable(GL_LIGHTING)
     glEnable(GL_LIGHT0)
@@ -150,12 +125,12 @@ if __name__ == '__main__':
                 pg.display.set_mode((event.w, event.h), DOUBLEBUF | OPENGL | RESIZABLE)
         # OnPaint
         w, h = pg.display.Info().current_w, pg.display.Info().current_h
+
         on_paint(w, h, angle)
 
         angle += 0.5
         if angle > 360.0:
             angle = 0.0
-
         # -----------------
         pg.display.flip()
         pg.time.wait(10)

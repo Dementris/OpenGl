@@ -62,6 +62,7 @@ def resize(width, height):
     gluLookAt(0.0, 0.0, 8.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
 
 
+
 if __name__ == '__main__':
     pg.init()
     display = (800, 600)

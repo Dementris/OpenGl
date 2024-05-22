@@ -111,7 +111,7 @@ if __name__ == '__main__':
         glRotate(abs(x or y), x, y, 0)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         draw_3d(angle)
-        angle += 1 
+        angle += 5
         if(angle>=360):
             angle = 0
         # ----------------
